@@ -1,0 +1,16 @@
+﻿<div class="mb-3">
+    <NumberInput EnableMinMax="true" Min="@min" Max="@max" TValue="int" @bind-Value="@amount" Placeholder="@placeholder" />
+</div>
+
+@code {
+    private int amount;
+
+    [Parameter]
+    public string placeholder { get; set; }
+
+    [Parameter]
+    public int min { get; set; }
+
+    [Parameter]
+    public int max { get; set; }
+}

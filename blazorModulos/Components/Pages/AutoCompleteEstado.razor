@@ -1,0 +1,32 @@
+﻿@using blazorModulos.Models
+
+<AutoComplete @bind-Value="estado1"
+              TItem="EstadoModel"
+              DataProvider="EstadosDataProvider"
+              PropertyName="Estado1"
+              Placeholder="Selecciona el estado..."
+              OnChanged="(EstadoModel estado) => OnAutoCompleteChanged(estado)" />
+
+
+@code {
+    private string estado1;
+
+    public IEnumerable<EstadoModel> estados;
+
+    public HttpClient httpClient = new HttpClient();
+
+    private async Task<AutoCompleteDataProviderResult<EstadoModel>> EstadosDataProvider(AutoCompleteDataProviderRequest<EstadoModel> request)
+    {
+        string url = "https://localhost:7009/estados/";
+
+        if (estados == null)
+            estados = await httpClient.GetFromJsonAsync<List<EstadoModel>>(url);
+
+        return await Task.FromResult(request.ApplyTo(estados.OrderBy(estado => estado.Estado1)));
+    }
+
+    private void OnAutoCompleteChanged(EstadoModel estado)
+    {        
+        Console.WriteLine($"'{estado?.Estado1}' seleccionado.");
+    }
+}

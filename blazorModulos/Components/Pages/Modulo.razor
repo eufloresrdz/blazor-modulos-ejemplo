@@ -1,0 +1,77 @@
+﻿@page "/modulo"
+@page "/modulo/{idModulo:int}"
+
+@using blazorModulos.Models
+@rendermode InteractiveServer
+
+<PageTitle>Modulo</PageTitle>
+
+@if (modulo == null)
+{
+    <p><em>Cargando información...</em></p>
+}
+else
+{
+    <Callout Type="CalloutType.Warning" HideHeading="true">
+        <h4>@modulo.Titulo</h4><br />
+        <h5>Version: @modulo.Version</h5>
+    </Callout>
+
+    <form style="border-style:solid; border-width:thin; border-color:lightgray; padding: 10px">
+
+        @foreach (PreguntasxmoduloModel pregunta in modulo.Preguntasxmodulos)
+        {
+            <div class="mb-3">
+                <label for="name" class="mb-3">@pregunta.Posicion - @pregunta.Texto</label>
+            </div>
+
+            <div class="mb-3" style="margin: 10px">
+
+                @foreach (Respuestasxmodulo respuesta in pregunta.Respuestasxmodulos)
+                {
+                    switch (respuesta.IdTipo)
+                    {
+                        case 1:
+                            <Buttons placeholder="@respuesta.Placeholder"></Buttons>
+                            break;
+
+                        case 2:
+                            <TextArea placeholder="@respuesta.Placeholder" maxlength="@(respuesta.MaxLength ?? 0)" height="@respuesta.Height" />
+                            break;
+
+                        case 3:
+                            <AutoCompleteEstado></AutoCompleteEstado>
+                            break;
+
+                        case 4:
+                            <InptNumber placeholder="@respuesta.Placeholder" max="@(respuesta.Max ?? 0)" min="@(respuesta.Min ?? 0)" />
+                            break;
+                    }
+                }
+            </div>
+            <br />
+        }
+
+        <div class="row">
+            <div class="col-md-12 text-right" style="margin-left: 85%;margin-right: 15%;">
+                <button type="submit" class="btn btn-success float-right" style="min-width: 130px">Guardar</button>
+            </div>
+        </div>
+    </form>
+}
+
+@code {
+    [Parameter]
+    public int idModulo { get; set; }
+
+    public ModuloModel modulo;
+
+    public HttpClient httpClient = new HttpClient();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string url = "https://localhost:7009/modulos/" + idModulo.ToString();
+        modulo = await httpClient.GetFromJsonAsync<ModuloModel>(url);
+    }
+
+}

@@ -1,0 +1,17 @@
+﻿<Button Color="@color" Style="margin: 10px; min-width: 100px" @onclick="OnClick"> @placeholder </Button>
+
+@code
+{
+    [Parameter]
+    public string placeholder { get; set; }
+
+    public ButtonColor color = ButtonColor.Primary;
+
+    protected void OnClick(EventArgs args)
+    {
+        if (color == ButtonColor.Primary)
+            color = ButtonColor.Warning;
+        else
+            color = ButtonColor.Primary;
+    }
+}

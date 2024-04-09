@@ -1,0 +1,16 @@
+﻿<div class="form-group row mb-3">
+    <InputText placeholder="@placeholder" @bind-Value="value" maxlength="@maxlength" style="@($"height:{height}")"></InputText>
+</div>
+
+@code {
+    public string value { get; set; }
+
+    [Parameter]
+    public string placeholder { get; set; }
+    
+    [Parameter]
+    public int maxlength { get; set; }
+
+    [Parameter]
+    public string height { get; set; }
+}

@@ -1,0 +1,47 @@
+﻿@using blazorModulos.Models
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">blazorModulos</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+@if (modulos == null)
+{
+
+}
+else
+{
+    <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+
+            @foreach (ModuloModel modulo in modulos)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="@($"modulo/{modulo.idModulo}")">
+                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Modulo @modulo.idModulo.ToString()
+                    </NavLink>
+                </div>
+            }
+        </nav>
+    </div>
+}
+
+@code {
+    public List<ModuloModel> modulos;
+
+    public HttpClient httpClient = new HttpClient();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string url = "https://localhost:7009/modulos-titulos/";
+        modulos = await httpClient.GetFromJsonAsync<List<ModuloModel>>(url);
+    }
+}
